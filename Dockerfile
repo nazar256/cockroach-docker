@@ -1,4 +1,4 @@
-FROM golang:1.15-bullseye as prebuild
+FROM golang:1.15-buster as prebuild
 ARG TARGETARCH
 
 RUN go version
