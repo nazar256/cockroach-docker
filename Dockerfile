@@ -1,7 +1,7 @@
 FROM golang:1.19-bullseye as prebuild
 WORKDIR /home
 ADD main.go .
-RUN CGO_ENABLED=0 go build -o hello ./main.go
+RUN uname -a && CGO_ENABLED=0 go build -o hello ./main.go
 
 FROM debian:bullseye-slim
 COPY --from=prebuild /home/hello /hello
