@@ -9,7 +9,7 @@ RUN echo "deb https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get -y update
-RUN apt-get -y install build-essential gcc g++ cmake autoconf wget bison libncurses-dev ccache curl git libgeos-dev tzdata apt-transport-https lsb-release ca-certificates bazel* yarn nodejs
+RUN apt-get -y install build-essential gcc g++ cmake autoconf wget bison libncurses-dev ccache curl git libgeos-dev tzdata apt-transport-https lsb-release ca-certificates bazel yarn nodejs
 
 FROM  prebuild as build
 ARG VERSION
