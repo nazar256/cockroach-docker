@@ -3,6 +3,6 @@ WORKDIR /home
 ADD main.go .
 RUN CGO_ENABLED=0 go build -o hello ./main.go
 
-FROM alpine
+FROM debian:bullseye-slim
 COPY --from=prebuild /home/hello /hello
 CMD ["/hello"]
