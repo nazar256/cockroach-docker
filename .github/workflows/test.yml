@@ -2,6 +2,8 @@ name: ci
 
 on:
   push:
+    tag:
+      - v*
 
 jobs:
   buildx:
@@ -22,11 +24,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Show versions
+        run: |
+          echo $RELEASE_VERSION
+          echo ${{ env.RELEASE_VERSION }}
       -
         name: Build
         uses: docker/build-push-action@v3
         with:
           platforms: linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/s390x
           push: true
-          tags: dockerforclouds/test:latest
+          tags: dockerforclouds/test:${{ env.RELEASE_VERSION }}
           context: .
