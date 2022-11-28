@@ -2,8 +2,8 @@ name: ci
 
 on:
   push:
-    tag:
-      - v*
+    tags:
+      - '*'
 
 jobs:
   buildx:
@@ -40,7 +40,7 @@ jobs:
         name: Build
         uses: docker/build-push-action@v3
         with:
-          platforms: linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/s390x
+          platforms: linux/amd64,linux/arm64/v8
           push: true
           tags: dockerforclouds/cockroach:${{ env.RELEASE_VERSION }}
           build-args: |
