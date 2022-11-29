@@ -42,7 +42,9 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: dockerforclouds/cockroach:${{ env.RELEASE_VERSION }}
+          tags: |
+            dockerforclouds/cockroach:${{ env.RELEASE_VERSION }}
+            dockerforclouds/cockroach:latest
           build-args: |
             VERSION=${{ env.RELEASE_VERSION }}
           context: .
