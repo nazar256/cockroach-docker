@@ -1,4 +1,4 @@
-FROM golang:1.19 as prebuild
+FROM golang:1.18 as prebuild
 ARG TARGETARCH
 
 RUN go version
@@ -26,7 +26,8 @@ RUN /bin/bash -c "make build"
 RUN /bin/bash -c "make install"
 
 FROM debian:bullseye-slim
-RUN apt-get update && \
+RUN useradd -ms /bin/bash cockroach && \
+    apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y libc6 ca-certificates tzdata hostname tar && \
     rm -rf /var/lib/apt/lists/*
@@ -35,5 +36,7 @@ ENV PATH=/cockroach:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 RUN mkdir -p /cockroach/ /usr/local/lib/cockroach /licenses
 COPY --from=build /usr/local/bin/cockroach /cockroach/cockroach
 COPY --from=build /go/native/*/geos/lib/libgeos.so /go/native/*/geos/lib/libgeos_c.so /usr/local/lib/cockroach/
+
+USER cockroach
 EXPOSE 26257 8080
 ENTRYPOINT ["/cockroach/cockroach"]
