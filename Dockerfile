@@ -1,4 +1,4 @@
-FROM golang:1.18 as prebuild
+FROM golang:1.17 as prebuild
 ARG TARGETARCH
 
 RUN go version
