@@ -1,4 +1,4 @@
-FROM golang:1.18 as prebuild
+FROM golang:1.17 as prebuild
 ARG TARGETARCH
 
 RUN go version
@@ -37,6 +37,8 @@ RUN mkdir -p /cockroach/ /usr/local/lib/cockroach /licenses
 COPY --from=build /usr/local/bin/cockroach /cockroach/cockroach
 COPY --from=build /go/native/*/geos/lib/libgeos.so /go/native/*/geos/lib/libgeos_c.so /usr/local/lib/cockroach/
 
+VOLUME [ "/home/cockroach/cockroach-data" ]
+
 USER cockroach
-EXPOSE 26257 8080
-ENTRYPOINT ["/cockroach/cockroach"]
+EXPOSE 36257 26257 8080
+CMD ["/cockroach/cockroach"]
