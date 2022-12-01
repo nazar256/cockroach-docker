@@ -1,4 +1,4 @@
-FROM golang:1.17 as prebuild
+FROM golang:1.19 as prebuild
 ARG TARGETARCH
 
 RUN go version
@@ -22,7 +22,8 @@ WORKDIR /go/src/github.com/cockroachdb
 RUN /bin/bash -c "git clone --branch ${VERSION} https://github.com/cockroachdb/cockroach"
 WORKDIR /go/src/github.com/cockroachdb/cockroach
 RUN /bin/bash -c "git submodule update --init --recursive"
-RUN /bin/bash -c "make build"
+RUN export NODE_OPTIONS=--max-old-space-size=7500 && \
+    /bin/bash -c "make build"
 RUN /bin/bash -c "make install"
 
 FROM debian:bullseye-slim
