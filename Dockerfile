@@ -1,4 +1,4 @@
-FROM golang:1.19 as prebuild
+FROM golang:1.20 as prebuild
 ARG TARGETARCH
 
 RUN go version
@@ -30,7 +30,7 @@ FROM debian:bullseye-slim
 RUN useradd -ms /bin/bash cockroach && \
     apt-get update && \
     apt-get -y upgrade && \
-    apt-get install -y libc6 ca-certificates tzdata hostname tar && \
+    apt-get install -y libc6 ca-certificates tzdata hostname tar curl && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir -p /cockroach/cockroach-data /usr/local/lib/cockroach /licenses && \
     chown -R cockroach /cockroach/
@@ -42,5 +42,8 @@ COPY --from=build /go/native/*/geos/lib/libgeos.so /go/native/*/geos/lib/libgeos
 VOLUME [ "/cockroach/cockroach-data" ]
 
 USER cockroach
+
+HEALTHCHECK CMD curl --fail http://localhost:8080/health || exit 1
+
 EXPOSE 36257 26257 8080
 CMD ["/cockroach/cockroach"]
